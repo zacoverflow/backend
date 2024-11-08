@@ -38,7 +38,7 @@ def get_route():
     # Extract route information
     route_info = directions_data['routes'][0]
     overview_polyline = route_info['overview_polyline']['points']
-    tolls = any(leg['hasTolls'] for leg in route_info['legs'])
+    tolls = any(leg.get('hasTolls', False) for leg in route_info['legs'])
     total_distance = sum(leg['distance']['value'] for leg in route_info['legs'])  # in meters
     total_duration = sum(leg['duration']['value'] for leg in route_info['legs'])  # in seconds
 
