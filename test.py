@@ -35,15 +35,21 @@ def get_route():
     if directions_data['status'] != 'OK':
         return jsonify({'error': 'Failed to retrieve directions'}), 400
 
-    # Extract route information
-    route_info = directions_data['routes'][0]
-    overview_polyline = route_info['overview_polyline']['points']
-    tolls = any(leg.get('hasTolls', False) for leg in route_info['legs'])
-    total_distance = sum(leg['distance']['value'] for leg in route_info['legs'])  # in meters
-    total_duration = sum(leg['duration']['value'] for leg in route_info['legs'])  # in seconds
+    # Extract detailed points from each step
+    route_points = []
+    for leg in directions_data['routes'][0]['legs']:
+        for step in leg['steps']:
+            step_polyline = step['polyline']['points']
+            route_points.append(step_polyline)
+
+    overview_polyline = directions_data['routes'][0]['overview_polyline']['points']
+    tolls = any(leg.get('hasTolls', False) for leg in directions_data['routes'][0]['legs'])
+    total_distance = sum(leg['distance']['value'] for leg in directions_data['routes'][0]['legs'])  # in meters
+    total_duration = sum(leg['duration']['value'] for leg in directions_data['routes'][0]['legs'])  # in seconds
 
     return jsonify({
         'overview_polyline': overview_polyline,
+        'detailed_route_points': route_points,
         'total_distance_m': total_distance,
         'total_duration_s': total_duration,
         'tolls': tolls,
