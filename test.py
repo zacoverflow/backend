@@ -70,23 +70,22 @@ async def get_route():
     if not origin_address or not destination_address:
         return jsonify({'error': 'Both origin and destination addresses are required'}), 400
 
-    # Run get_directions and get_toll_cost concurrently
-    directions_data, tolls = await asyncio.gather(
-        get_directions(origin_address, destination_address),
-        get_toll_cost(overview_polyline)
-    )
-
+    # Run get_directions to retrieve overview_polyline first
+    directions_data = await get_directions(origin_address, destination_address)
     if directions_data['status'] != 'OK':
         return jsonify({'error': 'Failed to retrieve directions'}), 400
 
-    # Extract detailed points from each step
-    route_points = []
-    for leg in directions_data['routes'][0]['legs']:
-        for step in leg['steps']:
-            step_polyline = step['polyline']['points']
-            route_points.append(step_polyline)
-
+    # Extract overview_polyline for get_toll_cost
     overview_polyline = directions_data['routes'][0]['overview_polyline']['points']
+    tolls = await get_toll_cost(overview_polyline)  # Now using await
+
+    # Extract detailed points from each step
+    route_points = [
+        step['polyline']['points']
+        for leg in directions_data['routes'][0]['legs']
+        for step in leg['steps']
+    ]
+
     total_distance = sum(leg['distance']['value'] for leg in directions_data['routes'][0]['legs'])  # in meters
     total_duration = sum(leg['duration']['value'] for leg in directions_data['routes'][0]['legs'])  # in seconds
 
