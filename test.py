@@ -12,11 +12,11 @@ NSW_TOLL_API_KEY = os.environ.get("NSW_TOLL_API_Key")
 
 def get_toll_cost(polyline):
     """Calculate toll costs for a route using the toll calculator API."""
-    print("NSW_TOLL_API_KEY:", NSW_TOLL_API_KEY)
+    print("NSW_TOLL_API_KEY:", os.environ.get("NSW_TOLL_API_Key"))
     headers = {
         'Content-Type': 'application/json',
         'accept': 'application/json',
-        'Authorization': NSW_TOLL_API_KEY
+        'Authorization': os.environ.get("NSW_TOLL_API_Key")
     }
     data = {
         "accuracy": 10,
