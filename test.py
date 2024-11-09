@@ -18,8 +18,6 @@ async def get_toll_cost():
     polyline = data.get('route')
     duration = data.get('duration')
     distance = data.get('distance')
-    print(duration)
-    print(distance) 
     headers = {
         'Content-Type': 'application/json',
         'accept': 'application/json',
@@ -47,13 +45,25 @@ async def get_toll_cost():
     async with aiohttp.ClientSession() as session:
         async with session.post(TOLL_CALCULATOR_URL, json=data, headers=headers) as response:
             toll_data = await response.json()
-            print(toll_data)
             if response.status == 200 and "match" in toll_data and "tollsCharged" in toll_data["match"]:
                 tolls = toll_data["match"]["tollsCharged"]
                 total_toll_cost = sum(charge["chargeInCents"] for toll in tolls for charge in toll["charges"]) / 100  # Convert cents to dollars
-                return {"toll_cost": total_toll_cost, "currency": "AUD"}
             else:
-                return {"toll_cost": 0, "currency": "AUD"}
+                return jsonify({"error": "Could not retrieve toll data"}), 400
+    
+    # Fare Calculation
+    try:
+        duration_hours = int(duration) / 3600
+        distance_km = int(distance) / 1000   
+
+        # Fare calculation formula
+        fare = (duration_hours * 100) + (0.4 * distance_km) + total_toll_cost
+        print(fare)
+        return jsonify({"fare": fare}), 200
+    
+    except Exception as e:
+        return jsonify({"error": f"An error occurred in fare calculation: {str(e)}"}), 500
+
 
 async def get_directions(origin, destination):
     """Get driving directions from origin to destination using Google Maps API."""
