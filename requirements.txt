@@ -1,5 +1,6 @@
 gunicorn
-flask
+Flask[async]
 requests
 datetime
 aiohttp
+flask
