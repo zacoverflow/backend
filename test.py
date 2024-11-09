@@ -42,6 +42,7 @@ async def get_toll_cost():
     async with aiohttp.ClientSession() as session:
         async with session.post(TOLL_CALCULATOR_URL, json=data, headers=headers) as response:
             toll_data = await response.json()
+            print(toll_data)
             if response.status == 200 and "match" in toll_data and "tollsCharged" in toll_data["match"]:
                 tolls = toll_data["match"]["tollsCharged"]
                 total_toll_cost = sum(charge["chargeInCents"] for toll in tolls for charge in toll["charges"]) / 100  # Convert cents to dollars
