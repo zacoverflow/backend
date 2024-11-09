@@ -46,6 +46,15 @@ def get_route():
     tolls = any(leg.get('hasTolls', False) for leg in directions_data['routes'][0]['legs'])
     total_distance = sum(leg['distance']['value'] for leg in directions_data['routes'][0]['legs'])  # in meters
     total_duration = sum(leg['duration']['value'] for leg in directions_data['routes'][0]['legs'])  # in seconds
+    fare = directions_data['routes'][0].get('fare')
+    if fare:
+        fare_info = {
+            'currency': fare.get('currency'),
+            'value': fare.get('value'),
+            'text': fare.get('text')
+        }
+    else:
+        fare_info = None
 
     return jsonify({
         'overview_polyline': overview_polyline,
@@ -53,6 +62,7 @@ def get_route():
         'total_distance_m': total_distance,
         'total_duration_s': total_duration,
         'tolls': tolls,
+        'fare': fare_info 
     })
 
 if __name__ == "__main__":
