@@ -77,7 +77,6 @@ async def get_route():
 
     # Extract overview_polyline for get_toll_cost
     overview_polyline = directions_data['routes'][0]['overview_polyline']['points']
-    tolls = await get_toll_cost(overview_polyline)  # Now using await
 
     # Extract detailed points from each step
     route_points = [
@@ -94,7 +93,6 @@ async def get_route():
         'detailed_route_points': route_points,
         'total_distance_m': total_distance,
         'total_duration_s': total_duration,
-        'fare': tolls
     })
 
 if __name__ == "__main__":
