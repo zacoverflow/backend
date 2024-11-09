@@ -16,7 +16,7 @@ def get_toll_cost(polyline):
     headers = {
         'Content-Type': 'application/json',
         'accept': 'application/json',
-        'Authorization': os.environ.get("NSW_TOLL_API_Key")
+        'Authorization': 'apikey eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJBQmFvM1ZOMFdxUmhRLTRxdDcyR21BcWUzLVZac2V3WUZGYzdGc2NNQzdVIiwiaWF0IjoxNzMxMTUwMzA5fQ.RwVmJTADbu5iNG_M7xHvurY7qd9dTiFx-p6nMUWiLDI'
     }
     data = {
         "accuracy": 10,
