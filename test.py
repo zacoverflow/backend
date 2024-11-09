@@ -12,8 +12,9 @@ TOLL_CALCULATOR_URL = "https://api.transport.nsw.gov.au/v2/roads/toll_calc/match
 NSW_TOLL_API_KEY = os.environ.get("NSW_TOLL_API_KEY")
 
 @app.route('/get-fare', methods=['GET'])
-async def get_toll_cost(polyline):
+async def get_toll_cost():
     """Calculate toll costs for a route using the toll calculator API."""
+    polyline = request.args.get('route')
     headers = {
         'Content-Type': 'application/json',
         'accept': 'application/json',
