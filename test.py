@@ -14,7 +14,7 @@ NSW_TOLL_API_KEY = os.environ.get("NSW_TOLL_API_KEY")
 @app.route('/get-fare', methods=['POST'])
 async def get_toll_cost():
     """Calculate toll costs for a route using the toll calculator API."""
-    data = await request.get_json()  # Retrieve JSON body data
+    data = request.get_json()  # Retrieve JSON body data
     polyline = data.get('route')
     duration = data.get('duration')
     distance = data.get('distance')
