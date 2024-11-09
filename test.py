@@ -21,7 +21,7 @@ async def get_toll_cost():
     print(duration)
     print(distance)
     if isinstance(polyline, str):
-        polyline = polyline.split('|')
+        polyline = polyline.split('|') 
     headers = {
         'Content-Type': 'application/json',
         'accept': 'application/json',
