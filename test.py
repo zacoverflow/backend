@@ -11,7 +11,7 @@ GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY")
 TOLL_CALCULATOR_URL = "https://api.transport.nsw.gov.au/v2/roads/toll_calc/match"
 NSW_TOLL_API_KEY = os.environ.get("NSW_TOLL_API_KEY")
 
-@app.route('/get-fare', methods=['GET'])
+@app.route('/get-fare', methods=['POST'])
 async def get_toll_cost():
     """Calculate toll costs for a route using the toll calculator API."""
     data = await request.get_json()  # Retrieve JSON body data
